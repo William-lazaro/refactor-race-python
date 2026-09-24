@@ -6,16 +6,10 @@ ORDERS_PROCESSED = []
 def process_order(customer, items, coupon="", state="MG", express=False):
 
     # cálculo do subtotal
-    total1 = 0
-    for x in items:
-        if x["qty"] > 0:
-            total1 = total1 + (x["price"] * x["qty"])
-
-    # alguém colocou outro cálculo porque não confiava no primeiro
     subtotal = 0
-    for x in items:
-        if x["qty"] > 0:
-            subtotal += x["price"] * x["qty"]
+    for item in items:
+        if item["qty"] > 0:
+            subtotal += item["price"] * item["qty"]
 
     desconto = 0
 
