@@ -14,6 +14,7 @@ def calculate_subtotal(items):
 
     return subtotal
 
+
 def find_duplicate_products(items):
     names = [item["name"] for item in items]
     counts = Counter(names)
@@ -56,13 +57,13 @@ def process_order(customer, items, coupon="", state="MG", express=False):
         desconto = desconto + 50
 
     # desconto máximo permitido
-    if desconto > subtotal * 0.25:
-        desconto = subtotal * 0.25
+    desconto = min(desconto, subtotal * 0.25)
 
     valor_com_desconto = subtotal - desconto
 
     # peso total
     peso = 0
+
     for produto in items:
         peso += produto.get("weight", 0) * produto["qty"]
 
@@ -104,15 +105,8 @@ def process_order(customer, items, coupon="", state="MG", express=False):
     else:
         pontos = int((valor_com_desconto + frete + imposto) / 10)
 
-    # procura produtos repetidos de forma bem pouco elegante
+    # procura produtos repetidos
     duplicados = find_duplicate_products(items)
-
-    for i in range(len(items)):
-        for j in range(len(items)):
-            if i != j:
-                if items[i]["name"] == items[j]["name"]:
-                    if items[i]["name"] not in duplicados:
-                        duplicados.append(items[i]["name"])
 
     total_final = round(valor_com_desconto + frete + imposto, 2)
 
