@@ -26,13 +26,10 @@ def process_order(customer, items, coupon="", state="MG", express=False):
             desconto = subtotal * 0.15
         else:
             desconto = subtotal * 0.10
-    else:
-        if customer["type"] == "employee":
-            desconto = subtotal * 0.20
-        else:
-            if customer["type"] == "regular":
-                if subtotal >= 800:
-                    desconto = subtotal * 0.05
+    elif customer["type"] == "employee":
+        desconto = subtotal * 0.20
+    elif customer["type"] == "regular" and subtotal >= 800:
+        desconto = subtotal * 0.05
 
     # cupons
     if coupon == "PROMO10":
