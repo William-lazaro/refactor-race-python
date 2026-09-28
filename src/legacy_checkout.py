@@ -1,5 +1,7 @@
 # legacy_checkout.py
 
+from collections import Counter
+
 ORDERS_PROCESSED = []
 
 
@@ -11,6 +13,18 @@ def calculate_subtotal(items):
             subtotal += item["price"] * item["qty"]
 
     return subtotal
+
+def find_duplicate_products(items):
+    names = [item["name"] for item in items]
+    counts = Counter(names)
+
+    duplicados = []
+
+    for name in names:
+        if counts[name] > 1 and name not in duplicados:
+            duplicados.append(name)
+
+    return duplicados
 
 
 def process_order(customer, items, coupon="", state="MG", express=False):
@@ -91,7 +105,7 @@ def process_order(customer, items, coupon="", state="MG", express=False):
         pontos = int((valor_com_desconto + frete + imposto) / 10)
 
     # procura produtos repetidos de forma bem pouco elegante
-    duplicados = []
+    duplicados = find_duplicate_products(items)
 
     for i in range(len(items)):
         for j in range(len(items)):
